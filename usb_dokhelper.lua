@@ -18,7 +18,7 @@ local script_vers = 2
 local script_vers_text = "1.02"
 
 local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
-local update_path = getWorkingDirectory() .. "/update.ini"
+local update_path = getWorkingDirectory() .. "/usb_dokhelper_update.ini"
 
 local script_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/usb_dokhelper.lua"
 local script_path = thisScript().path
