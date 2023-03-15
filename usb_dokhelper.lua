@@ -14,8 +14,8 @@ local mynickname
 
 update_state = false
 
-local script_vers = 1
-local script_vers_text = "1.01"
+local script_vers = 2
+local script_vers_text = "1.02"
 
 local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
 local update_path = getWorkingDirectory() .. "/update.ini"
@@ -97,7 +97,7 @@ function main()
 end
 
 function cmd_upd(args)
-	sampAddChatMessage('{333366} USB DH info | {808080}обнова ебать', 0xFFFFFF)		
+	sampAddChatMessage('{333366} USB DH info | {808080}обнова ебать v.2', 0xFFFFFF)		
 end
 
 
