@@ -20,7 +20,7 @@ local script_vers_text = "1.01"
 local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
 local update_path = getWorkingDirectory() .. "/update.ini"
 
-local script_url = ""
+local script_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/usb_dokhelper.lua"
 local script_path = thisScript().path
 
 local nicks = {
@@ -77,7 +77,7 @@ function main()
 			end
 			os.remove(update_path)
 		else
-			--sampAddChatMessage('{333366} USB DH info | {808080}обновы нет. версия: ', 0xFFFFFF)	
+			sampAddChatMessage('{333366} USB DH info | {808080}обновы нет. версия: ', 0xFFFFFF)	
 		end
 	end)
 
