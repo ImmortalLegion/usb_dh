@@ -22,6 +22,7 @@ local update_path = getWorkingDirectory() .. "/update.ini"
 
 local script_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/usb_dokhelper.lua"
 local script_path = thisScript().path
+local updateIni = inicfg.load(nil, update_path)
 
 local nicks = {
 	 -- Commanders
@@ -44,7 +45,7 @@ function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end												-- Проверяем загружен ли sampfuncs и SAMP если не загружены - возвращаемся к началу
 	while not isSampAvailable() do wait(100) end																	-- Проверяем загружен ли SA-MP
 
-	sampAddChatMessage('{333366} «USB Doklad Helper» {808080}успешно загружен. /dh_info', 0xFFFFFF)				    -- Сообщаем об загрузке скрипта
+	sampAddChatMessage('{333366} «USB Doklad Helper» {808080}успешно загружен. Версия: ' .. script_vers_text, 0xFFFFFF)				    -- Сообщаем об загрузке скрипта
 
 	sampRegisterChatCommand('dk', cmd_dk)																			-- Регистрация команды
 	sampRegisterChatCommand('dn', cmd_dn)                                                         
@@ -59,8 +60,6 @@ function main()
 	sampRegisterChatCommand('cdd', cmd_cdd)  
 	sampRegisterChatCommand('edd', cmd_edd)  
 
-	sampRegisterChatCommand('upd', cmd_upd)  
-
 	sampRegisterChatCommand('dh_info', cmd_dh_info)  
 
 	while not sampIsLocalPlayerSpawned() do wait(0) end																-- Проверяем зашёл ли игрок на сервер
@@ -70,14 +69,13 @@ function main()
 
 	downloadUrlToFile(update_url, update_path, function(id, status)
 		if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
-			updateIni = inicfg.load(nil, update_path)
 			if tonumber(updateIni.info.vers) > script_vers then
-				sampAddChatMessage('{333366} USB DH info | {808080}есть обнова. версия: ' .. updateIni.info.vers_text, 0xFFFFFF)	
+				sampAddChatMessage('{333366} USB DH info | {808080}Есть обновление. Новая версия: ' .. updateIni.info.vers_text, 0xFFFFFF)	
 				update_state = true
+			else
+				sampAddChatMessage('{333366} USB DH info | {808080}Обновлений нет. Загружена последняя версия: ' .. script_vers_text, 0xFFFFFF)	
 			end
 			os.remove(update_path)
-		else
-			sampAddChatMessage('{333366} USB DH info | {808080}обновы нет. версия: ', 0xFFFFFF)	
 		end
 	end)
 
@@ -85,9 +83,10 @@ function main()
 		wait(0)
 
 		if update_state then
+		sampAddChatMessage('{333366} USB DH info | {808080Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
 			downloadUrlToFile(script_url, script_path, function(id, status)
 				if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
-					sampAddChatMessage('{333366} USB DH info | {808080}обновлен. версия: ' .. updateIni.info.vers_text, 0xFFFFFF)
+					sampAddChatMessage('{333366} USB DH info | {808080}Обновление успешно скачано и установлено', 0xFFFFFF)
 					thisScript():reload()
 				end
 			end)
@@ -95,11 +94,6 @@ function main()
 		end
 	end
 end
-
-function cmd_upd(args)
-	sampAddChatMessage('{333366} USB DH info | {808080}обнова ебать v.2', 0xFFFFFF)		
-end
-
 
 function cmd_dk(args)
 	local info = {}
