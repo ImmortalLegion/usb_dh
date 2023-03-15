@@ -35,8 +35,8 @@ function main()
 	
 	update_state = false
 
-	local script_vers = 3
-	local script_vers_text = "2.03"
+	local script_vers = 4
+	local script_vers_text = "2.04"
 
 	local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
 	local update_path = getWorkingDirectory() .. "/usb_dokhelper_update.ini"
@@ -78,7 +78,7 @@ function main()
 		wait(0)
 
 		if update_state then
-		sampAddChatMessage('{333366} USB DH info | {808080Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
+		sampAddChatMessage('{333366} USB DH info | {808080}Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
 			downloadUrlToFile(script_url, script_path, function(id, status)
 				if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
 					sampAddChatMessage('{333366} USB DH info | {808080}Обновление успешно скачано и установлено', 0xFFFFFF)
