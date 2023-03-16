@@ -23,9 +23,9 @@ local nicks = {
 	 ['Ray_Hoggarth'] = 'R-H-51',
 	 -- Operative
 	 ['Frederick_Wertheim'] = 'F-W-69',
+	 ['Pull_Krove'] = 'P-K-99',
 	 -- Trainee
-	 ['Yukio_Matsui'] = 'Y-M-88',
-	 ['Looneyz_Kotov'] = 'L-K-34'
+	 ['Yukio_Matsui'] = 'Y-M-88'
 }
 
 function main()
@@ -35,8 +35,8 @@ function main()
 	
 	update_state = false
 
-	local script_vers = 4
-	local script_vers_text = "2.04"
+	local script_vers = 5
+	local script_vers_text = "2.05"
 
 	local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
 	local update_path = getWorkingDirectory() .. "/usb_dokhelper_update.ini"
