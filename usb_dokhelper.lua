@@ -9,6 +9,9 @@ local dlstatus = require('moonloader').download_status
 local inicfg = require 'inicfg'
 local sampev = require "lib.samp.events"
 
+local script_vers = 6
+local script_vers_text = "2.06"
+
 local _, myid
 local mynickname
 
@@ -36,9 +39,6 @@ function main()
 
 	
 	update_state = false
-
-	local script_vers = 6
-	local script_vers_text = "2.06"
 
 	local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
 	local update_path = getWorkingDirectory() .. "/usb_dokhelper_update.ini"
@@ -144,7 +144,7 @@ function cmd_kn(args)
 	local tmp_codnick = nicks[tmp_nick]
 	if #args ~= 0 then
 		if tmp_codnick ~= nil then
-			sampAddChatMessage('{333366} USB DH info | {808080}' .. tmp_nick .. ' имеет код - ' ..tmp_codnick, 0xFFFFFF)
+			sampAddChatMessage('{333366} USB DH info | {808080}' ..tmp_nick.. ' имеет код - ' ..tmp_codnick, 0xFFFFFF)
 		else
 			sampAddChatMessage('{333366} USB DH info | {808080}Человек в таблице сотрудников не обнаружен', 0xFFFFFF)
 			return
@@ -274,7 +274,7 @@ function cmd_cdd(args)
 end
 
 function cmd_dhinfo()
-	sampAddChatMessage('{333366} USB DH info | {808080}Список команд USB Doklad Helper', 0xFFFFFF)	
+	sampAddChatMessage('{333366} USB DH info | {808080}Список команд USB Doklad Helper. Версия: ' ..script_vers_text, 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/dk - {808080}стандартный доклад с тен-кодом', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/dn - {808080}вывод кода сотрудника в чат', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/kn - {808080}вывод кода сотрудника в чат, который видите только вы', 0xFFFFFF)	
