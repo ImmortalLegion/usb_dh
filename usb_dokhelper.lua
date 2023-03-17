@@ -25,7 +25,9 @@ local nicks = {
 	 ['Frederick_Wertheim'] = 'F-W-69',
 	 ['Pull_Krove'] = 'P-K-99',
 	 -- Trainee
-	 ['Yukio_Matsui'] = 'Y-M-88'
+	 ['Yukio_Matsui'] = 'Y-M-88',
+	 ['Siegmund Berg'] = 'S-B-12',
+	 ['Maria_Rooney'] = 'M-R-22'
 }
 
 function main()
@@ -35,8 +37,8 @@ function main()
 	
 	update_state = false
 
-	local script_vers = 5
-	local script_vers_text = "2.05"
+	local script_vers = 6
+	local script_vers_text = "2.06"
 
 	local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
 	local update_path = getWorkingDirectory() .. "/usb_dokhelper_update.ini"
@@ -48,13 +50,14 @@ function main()
 
 	sampRegisterChatCommand('dk', cmd_dk)																			-- Регистрация команды
 	sampRegisterChatCommand('dn', cmd_dn)                                                         
+	sampRegisterChatCommand('kn', cmd_kn)                                                         
 	sampRegisterChatCommand('kc', cmd_kc)     
 	   
 	sampRegisterChatCommand('post', cmd_post)      
 	
 	sampRegisterChatCommand('cdd', cmd_cdd)  
 
-	sampRegisterChatCommand('dh_info', cmd_dh_info)  
+	sampRegisterChatCommand('dhinfo', cmd_dhinfo)  
 
 	while not sampIsLocalPlayerSpawned() do wait(0) end																-- Проверяем зашёл ли игрок на сервер
 
@@ -132,6 +135,22 @@ function cmd_dk(args)
 		end
 	else 
 		sampAddChatMessage('{333366} USB DH info | {808080}Вы не сидите в автомобиле', 0xFFFFFF)
+		return
+	end
+end
+
+function cmd_kn(args)
+	local tmp_nick = sampGetPlayerNickname(args)
+	local tmp_codnick = nicks[tmp_nick]
+	if #args ~= 0 then
+		if tmp_codnick ~= nil then
+			sampAddChatMessage('{333366} USB DH info | {808080}' .. tmp_nick .. ' имеет код - ' ..tmp_codnick, 0xFFFFFF)
+		else
+			sampAddChatMessage('{333366} USB DH info | {808080}Человек в таблице сотрудников не обнаружен', 0xFFFFFF)
+			return
+		end
+	else
+		sampAddChatMessage('{333366} USB DH info | {808080}Введите ID', 0xFFFFFF)
 		return
 	end
 end
@@ -254,10 +273,11 @@ function cmd_cdd(args)
 	end
 end
 
-function cmd_dh_info()
+function cmd_dhinfo()
 	sampAddChatMessage('{333366} USB DH info | {808080}Список команд USB Doklad Helper', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/dk - {808080}стандартный доклад с тен-кодом', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/dn - {808080}вывод кода сотрудника в чат', 0xFFFFFF)	
+	sampAddChatMessage('{333366} USB DH info | {9999CC}/kn - {808080}вывод кода сотрудника в чат, который видите только вы', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/kc - {808080}сообщение в /kk с личным кодом', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/post [s, p, d, e] [kv] - {808080}s - старт, p - перемещение, d - доклад, e - конец, kv - квадрат', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/cdd [s, e, mes] - {808080}s - старт проверки, e - конец, mes - сообщение о проверке', 0xFFFFFF)	
