@@ -9,8 +9,8 @@ local dlstatus = require('moonloader').download_status
 local inicfg = require 'inicfg'
 local sampev = require "lib.samp.events"
 
-local script_vers = 8
-local script_vers_text = "3.08"
+local script_vers = 9
+local script_vers_text = "3.09"
 
 local _, myid
 local mynickname
@@ -139,7 +139,7 @@ function cmd_dk(args)
 				return
 			end
 		else
-			sampAddChatMessage('{333366} USB DH info | {808080}Введите тен-код', 0xFFFFFF)
+			sampAddChatMessage('{333366} USB DH info | {808080}Введите тен-код или доклад', 0xFFFFFF)
 			return
 		end
 	else 
@@ -284,7 +284,7 @@ end
 
 function cmd_dhinfo()
 	sampAddChatMessage('{333366} USB DH info | {808080}Список команд USB Doklad Helper. Версия: ' ..script_vers_text, 0xFFFFFF)	
-	sampAddChatMessage('{333366} USB DH info | {9999CC}/dk - {808080}стандартный доклад с тен-кодом', 0xFFFFFF)	
+	sampAddChatMessage('{333366} USB DH info | {9999CC}/dk - {808080}стандартный доклад с тен-кодом или без', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/dn - {808080}вывод кода сотрудника в чат', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/kn - {808080}вывод кода сотрудника в чат, который видите только вы', 0xFFFFFF)	
 	sampAddChatMessage('{333366} USB DH info | {9999CC}/kc - {808080}сообщение в /kk с личным кодом', 0xFFFFFF)	
