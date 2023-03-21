@@ -9,27 +9,28 @@ local dlstatus = require('moonloader').download_status
 local inicfg = require 'inicfg'
 local sampev = require "lib.samp.events"
 
-local script_vers = 7
-local script_vers_text = "2.07"
+local script_vers = 8
+local script_vers_text = "3.08"
 
 local _, myid
 local mynickname
 
 local nicks = {
 	 -- Commanders
-	 ['Renya_Stoun'] = 'R-S-7',
 	 ['Franko_Matizovich'] = 'F-M-95',
 	 ['Marshall_Requiem'] = 'M-R-71',
-	 -- Senior Operative
 	 ['Teddy_Ruiz'] = 'T-R-43',
+	 -- Senior Operative
 	 ['Marshall_Milford'] = 'M-M-23',
 	 ['Ray_Hoggarth'] = 'R-H-51',
 	 -- Operative
 	 ['Frederick_Wertheim'] = 'F-W-69',
 	 ['Pull_Krove'] = 'P-K-99',
-	 -- Trainee
 	 ['Yukio_Matsui'] = 'Y-M-88',
+	 ['Renya_Stoun'] = 'R-S-7',
+	 -- Trainee
 	 ['Siegmund_Berg'] = 'S-B-12',
+	 ['Stuart_Desiderio'] = 'S-D-3',
 	 ['Maria_Rooney'] = 'M-R-22'
 }
 
@@ -120,10 +121,18 @@ function cmd_dk(args)
 			end
 			local mycod = nicks[mynickname]
 			if mycod ~= nil then
-				if #info > 0 then
-					sampProcessChatInput(string.format('/kk %s, 10-%s, %s', mycod, args, table.concat(info,', ')))
+				if tonumber(args) then
+					if #info > 0 then
+						sampProcessChatInput(string.format('/kk %s, 10-%s, %s', mycod, args, table.concat(info,', ')))
+					else
+						sampProcessChatInput(string.format('/kk %s, 10-%s, solo', mycod, args))
+					end
 				else
-					sampProcessChatInput(string.format('/kk %s, 10-%s, solo', mycod, args))
+					if #info > 0 then
+						sampProcessChatInput(string.format('/kk %s, %s, %s', mycod, args, table.concat(info,', ')))
+					else
+						sampProcessChatInput(string.format('/kk %s, %s, solo', mycod, args))
+					end
 				end
 			else 
 				sampAddChatMessage('{333366} USB DH info | {808080}Ваш код в таблице сотрудников не обнаружен', 0xFFFFFF)		
