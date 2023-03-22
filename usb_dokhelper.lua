@@ -9,8 +9,8 @@ local dlstatus = require('moonloader').download_status
 local inicfg = require 'inicfg'
 local sampev = require "lib.samp.events"
 
-local script_vers = 9
-local script_vers_text = "3.09"
+local script_vers = 10
+local script_vers_text = "3.10"
 
 local _, myid
 local mynickname
@@ -24,13 +24,13 @@ local nicks = {
 	 ['Marshall_Milford'] = 'M-M-23',
 	 ['Ray_Hoggarth'] = 'R-H-51',
 	 -- Operative
-	 ['Frederick_Wertheim'] = 'F-W-69',
 	 ['Pull_Krove'] = 'P-K-99',
 	 ['Yukio_Matsui'] = 'Y-M-88',
 	 ['Renya_Stoun'] = 'R-S-7',
 	 -- Trainee
 	 ['Siegmund_Berg'] = 'S-B-12',
 	 ['Stuart_Desiderio'] = 'S-D-3',
+	 ['Kevin_Hoggarth'] = 'K-H-33',
 	 ['Maria_Rooney'] = 'M-R-22'
 }
 
