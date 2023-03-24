@@ -9,8 +9,8 @@ local dlstatus = require('moonloader').download_status
 local inicfg = require 'inicfg'
 local sampev = require "lib.samp.events"
 
-local script_vers = 13
-local script_vers_text = "4.13"
+local script_vers = 15
+local script_vers_text = "4.15"
 
 local _, myid
 local mynickname
@@ -61,64 +61,65 @@ function main()
 					local file = io.open(txt, 'r')
 					local i = 0
 
-					if file ~= nil then
-						for line in io.lines(txt) do
-							i = i + 1	
-							local name, sur, f, s, num = string.match(line, '(%a+)_(%a+)	(%a)-(%a)-(%d+)')
-							x = name .. '_' .. sur
-							y = f .. '-' .. s .. '-' .. num
-							nicks[x] = y
-						end
-						file:close()
-						local mycod = nicks[mynickname]
-						if mycod ~= nil then
-							sampAddChatMessage('{333366} USB DH info | {808080}У вас загружена актуальная версия сотрудников', 0xFFFFFF)	 
-							access = true
-						else
-							sampAddChatMessage('{333366} «USB Doklad Helper» {808080}не загружен', 0xFFFFFF)		
-							sampAddChatMessage('{333366} USB DH info | {808080}Ви не обнаружены в базе сотрудников УСБ. Обратитесь к Начальнику', 0xFFFFFF)	
-							access = true
+					if update_txt == false then
+						if file ~= nil then
+							for line in io.lines(txt) do
+								i = i + 1	
+								local name, sur, f, s, num = string.match(line, '(%a+)_(%a+)	(%a)-(%a)-(%d+)')
+								x = name .. '_' .. sur
+								y = f .. '-' .. s .. '-' .. num
+								nicks[x] = y
+							end
+							file:close()
+							local mycod = nicks[mynickname]
+							if mycod ~= nil then
+								sampAddChatMessage('{333366} USB DH info | {808080}У вас загружена актуальная версия сотрудников', 0xFFFFFF)	 
+								access = true
+							else
+								sampAddChatMessage('{333366} «USB Doklad Helper» {808080}не загружен', 0xFFFFFF)		
+								sampAddChatMessage('{333366} USB DH info | {808080}Ви не обнаружены в базе сотрудников УСБ. Обратитесь к Начальнику', 0xFFFFFF)	
+								del_txt = true
+							end
+						else 
+							sampAddChatMessage('{333366} USB DH info | {808080}Проблема с скачиванием файла. Обратитесь к разработчику', 0xFFFFFF)
 							del_txt = true
 						end
-					else 
-						sampAddChatMessage('{333366} USB DH info | {808080}Проблема с скачиванием файла. Обратитесь к разработчику', 0xFFFFFF)
-					end
+						if del_txt then
+							os.remove(txt)
+						end
+						if access then
+							sampAddChatMessage('{333366} «USB Doklad Helper» {808080}успешно загружен. Версия: ' .. script_vers_text, 0xFFFFFF)				  
 
-					if del_txt then
-						os.remove(txt)
-					end
-
-					if access then
-						sampAddChatMessage('{333366} «USB Doklad Helper» {808080}успешно загружен. Версия: ' .. script_vers_text, 0xFFFFFF)				  
-
-						sampRegisterChatCommand('dk', cmd_dk)																			-- Регистрация команды
-						sampRegisterChatCommand('dn', cmd_dn)                                                         
-						sampRegisterChatCommand('kn', cmd_kn)                                                         
-						sampRegisterChatCommand('kc', cmd_kc)     
+							sampRegisterChatCommand('dk', cmd_dk)																			-- Регистрация команды
+							sampRegisterChatCommand('dn', cmd_dn)                                                         
+							sampRegisterChatCommand('kn', cmd_kn)                                                         
+							sampRegisterChatCommand('kc', cmd_kc)     
 	   
-						sampRegisterChatCommand('post', cmd_post)      
+							sampRegisterChatCommand('post', cmd_post)      
 	
-						sampRegisterChatCommand('cdd', cmd_cdd)  
+							sampRegisterChatCommand('cdd', cmd_cdd)  
 
-						sampRegisterChatCommand('dhinfo', cmd_dhinfo)  
-
-						if update_state then
-							sampAddChatMessage('{333366} USB DH info | {808080}Есть обновление. Новая версия: ' .. updateIni.info.vers_text, 0xFFFFFF)	
-							sampAddChatMessage('{333366} USB DH info | {808080}Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
-							downloadUrlToFile(script_url, script_path, function(id, status)
-								if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
-									sampAddChatMessage('{333366} USB DH info | {808080}Обновление успешно скачано и установлено', 0xFFFFFF)
-									thisScript():reload()
-								end
-							end)
-						else
-							sampAddChatMessage('{333366} USB DH info | {808080}Обновлений нет. Загружена последняя версия: ' .. script_vers_text, 0xFFFFFF)	
+							sampRegisterChatCommand('dhinfo', cmd_dhinfo)  
 						end
 					end
+					
 				end
 			end)
+			wait(2000)
+			if update_state and access then
+				sampAddChatMessage('{333366} USB DH info | {808080}Есть обновление. Новая версия: ' .. updateIni.info.vers_text, 0xFFFFFF)	
+				sampAddChatMessage('{333366} USB DH info | {808080}Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
+				downloadUrlToFile(script_url, script_path, function(id, status)
+					if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
+						sampAddChatMessage('{333366} USB DH info | {808080}Обновление успешно скачано и установлено', 0xFFFFFF)
+						thisScript():reload()
+					end
+				end)
+			else
+				sampAddChatMessage('{333366} USB DH info | {808080}Обновлений нет. Загружена последняя версия: ' .. script_vers_text, 0xFFFFFF)	
+			end
 			break
-		end		
+		end	
 	end
 end
 
