@@ -9,8 +9,8 @@ local dlstatus = require('moonloader').download_status
 local inicfg = require 'inicfg'
 local sampev = require "lib.samp.events"
 
-local script_vers = 15
-local script_vers_text = "4.15"
+local script_vers = 16
+local script_vers_text = "4.16"
 
 local _, myid
 local mynickname
@@ -105,7 +105,7 @@ function main()
 					
 				end
 			end)
-			wait(2000)
+			wait(5000)
 			if update_state and access then
 				sampAddChatMessage('{333366} USB DH info | {808080}Есть обновление. Новая версия: ' .. updateIni.info.vers_text, 0xFFFFFF)	
 				sampAddChatMessage('{333366} USB DH info | {808080}Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
