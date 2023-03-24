@@ -9,36 +9,25 @@ local dlstatus = require('moonloader').download_status
 local inicfg = require 'inicfg'
 local sampev = require "lib.samp.events"
 
-local script_vers = 10
-local script_vers_text = "3.10"
+local script_vers = 13
+local script_vers_text = "4.13"
 
 local _, myid
 local mynickname
 
-local nicks = {
-	 -- Commanders
-	 ['Franko_Matizovich'] = 'F-M-95',
-	 ['Marshall_Requiem'] = 'M-R-71',
-	 ['Teddy_Ruiz'] = 'T-R-43',
-	 -- Senior Operative
-	 ['Marshall_Milford'] = 'M-M-23',
-	 ['Ray_Hoggarth'] = 'R-H-51',
-	 -- Operative
-	 ['Pull_Krove'] = 'P-K-99',
-	 ['Yukio_Matsui'] = 'Y-M-88',
-	 ['Renya_Stoun'] = 'R-S-7',
-	 -- Trainee
-	 ['Siegmund_Berg'] = 'S-B-12',
-	 ['Stuart_Desiderio'] = 'S-D-3',
-	 ['Kevin_Hoggarth'] = 'K-H-33',
-	 ['Maria_Rooney'] = 'M-R-22'
-}
+
+local kktag = true
+local nicks = {}
 
 function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end												-- Проверяем загружен ли sampfuncs и SAMP если не загружены - возвращаемся к началу
 	while not isSampAvailable() do wait(100) end																	-- Проверяем загружен ли SA-MP
 
-	
+	local txt = getWorkingDirectory() .. '/usb_dokhelper_members.txt'
+
+	access = false
+	update_txt = true
+	del_txt = false
 	update_state = false
 
 	local update_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/update.ini"
@@ -46,19 +35,6 @@ function main()
 
 	local script_url = "https://raw.githubusercontent.com/ImmortalLegion/usb_dh/main/usb_dokhelper.lua"
 	local script_path = thisScript().path
-
-	sampAddChatMessage('{333366} «USB Doklad Helper» {808080}успешно загружен. Версия: ' .. script_vers_text, 0xFFFFFF)				    -- Сообщаем об загрузке скрипта
-
-	sampRegisterChatCommand('dk', cmd_dk)																			-- Регистрация команды
-	sampRegisterChatCommand('dn', cmd_dn)                                                         
-	sampRegisterChatCommand('kn', cmd_kn)                                                         
-	sampRegisterChatCommand('kc', cmd_kc)     
-	   
-	sampRegisterChatCommand('post', cmd_post)      
-	
-	sampRegisterChatCommand('cdd', cmd_cdd)  
-
-	sampRegisterChatCommand('dhinfo', cmd_dhinfo)  
 
 	while not sampIsLocalPlayerSpawned() do wait(0) end																-- Проверяем зашёл ли игрок на сервер
 
@@ -69,28 +45,80 @@ function main()
 		if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
 			updateIni = inicfg.load(nil, update_path)
 			if tonumber(updateIni.info.vers) > script_vers then
-				sampAddChatMessage('{333366} USB DH info | {808080}Есть обновление. Новая версия: ' .. updateIni.info.vers_text, 0xFFFFFF)	
 				update_state = true
-			else
-				sampAddChatMessage('{333366} USB DH info | {808080}Обновлений нет. Загружена последняя версия: ' .. script_vers_text, 0xFFFFFF)	
 			end
-			--os.remove(update_path)
 		end
 	end)
 
 	while true do																									-- Цикл для постоянной работы скрипта
 		wait(0)
+		if update_txt then
+			wait(10000)
+			os.remove(txt)
+			downloadUrlToFile('https://docs.google.com/spreadsheets/d/e/2PACX-1vSM_ClmsCK3HS3nqRhoVbtxGKU6ddGRk-134z4DDuEccmNDRHXODMxZvkb4O7pRqO8ZEq7tTUKX6Td2/pub?output=tsv', txt, function (id, status, p1, p2)
+				if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+					update_txt = false
+					local file = io.open(txt, 'r')
+					local i = 0
 
-		if update_state then
-		sampAddChatMessage('{333366} USB DH info | {808080}Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
-			downloadUrlToFile(script_url, script_path, function(id, status)
-				if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
-					sampAddChatMessage('{333366} USB DH info | {808080}Обновление успешно скачано и установлено', 0xFFFFFF)
-					thisScript():reload()
+					if file ~= nil then
+						for line in io.lines(txt) do
+							i = i + 1	
+							local name, sur, f, s, num = string.match(line, '(%a+)_(%a+)	(%a)-(%a)-(%d+)')
+							x = name .. '_' .. sur
+							y = f .. '-' .. s .. '-' .. num
+							nicks[x] = y
+						end
+						file:close()
+						local mycod = nicks[mynickname]
+						if mycod ~= nil then
+							sampAddChatMessage('{333366} USB DH info | {808080}У вас загружена актуальная версия сотрудников', 0xFFFFFF)	 
+							access = true
+						else
+							sampAddChatMessage('{333366} «USB Doklad Helper» {808080}не загружен', 0xFFFFFF)		
+							sampAddChatMessage('{333366} USB DH info | {808080}Ви не обнаружены в базе сотрудников УСБ. Обратитесь к Начальнику', 0xFFFFFF)	
+							access = true
+							del_txt = true
+						end
+					else 
+						sampAddChatMessage('{333366} USB DH info | {808080}Проблема с скачиванием файла. Обратитесь к разработчику', 0xFFFFFF)
+					end
+
+					if del_txt then
+						os.remove(txt)
+					end
+
+					if access then
+						sampAddChatMessage('{333366} «USB Doklad Helper» {808080}успешно загружен. Версия: ' .. script_vers_text, 0xFFFFFF)				  
+
+						sampRegisterChatCommand('dk', cmd_dk)																			-- Регистрация команды
+						sampRegisterChatCommand('dn', cmd_dn)                                                         
+						sampRegisterChatCommand('kn', cmd_kn)                                                         
+						sampRegisterChatCommand('kc', cmd_kc)     
+	   
+						sampRegisterChatCommand('post', cmd_post)      
+	
+						sampRegisterChatCommand('cdd', cmd_cdd)  
+
+						sampRegisterChatCommand('dhinfo', cmd_dhinfo)  
+
+						if update_state then
+							sampAddChatMessage('{333366} USB DH info | {808080}Есть обновление. Новая версия: ' .. updateIni.info.vers_text, 0xFFFFFF)	
+							sampAddChatMessage('{333366} USB DH info | {808080}Началось скачивание обновления. Скрипт перезагрузится через пару секунд', 0xFFFFFF)
+							downloadUrlToFile(script_url, script_path, function(id, status)
+								if status == dlstatus.STATUS_ENDDOWNLOADDATA then 
+									sampAddChatMessage('{333366} USB DH info | {808080}Обновление успешно скачано и установлено', 0xFFFFFF)
+									thisScript():reload()
+								end
+							end)
+						else
+							sampAddChatMessage('{333366} USB DH info | {808080}Обновлений нет. Загружена последняя версия: ' .. script_vers_text, 0xFFFFFF)	
+						end
+					end
 				end
 			end)
 			break
-		end
+		end		
 	end
 end
 
